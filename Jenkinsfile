@@ -1,34 +1,43 @@
- pipeline {
-   agent any
-   tools {
-     jdk 'jdk-11'
-     maven 'Maven-3.8.6'
-   }
-   stages {
-     stage('Checkout Code') {
-        steps {
-            checkout scm
-        }
-     }
-     stage('Build') {
-       steps {
-         sh 'mvn -B -DskipTests clean package'
-       }
-     }
-     stage('Test') {
-       steps {
-           sh 'mvn test'
-       }
-       post {
-         always {
-           junit 'target/surefire-reports/**/*.xml'
-         }
-       }
-     }
-  }
-  post {
-    always {
-      cleanWs()
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.8.6' // Replace with the name of your Maven tool configured in Jenkins
+        jdk 'JDK 17'         // Replace with the name of your JDK configured in Jenkins
     }
- }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'git@github.com:KethineniBhavya/jenkins-demo.git', credentialsId: 'your-ssh-credential-id'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build completed successfully!'
+        }
+        failure {
+            echo 'Build failed.'
+        }
+    }
 }
