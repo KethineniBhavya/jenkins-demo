@@ -1,0 +1,52 @@
+# 1. Give your workflow a name. This is what you'll see in the Actions tab.
+
+name: My First GitHub Actions Workflow
+
+# 2. Define the 'on' event trigger. This workflow will run on every push to the 'main' branch.
+
+on:
+
+  push:
+
+    branches: [ "main" ]
+
+  # Also allow manual runs from the Actions tab.
+
+  workflow_dispatch:
+
+# 3. Define the 'jobs' to be run. We have one job named 'build'.
+
+jobs:
+
+  build: # The name of our job. You can name it anything.
+
+    # 4. Specify the 'runner'. This job will run on a fresh Ubuntu machine provided by GitHub.
+
+    runs-on: ubuntu-latest
+
+    # 5. Define the 'steps' for this job. Steps are executed in order.
+
+    steps:
+
+      # Step 1: A pre-built action from the marketplace to check out your repository's code.
+
+      - name: Checkout repository code
+
+        uses: actions/checkout@v3
+
+      # Step 2: A simple step that runs a shell command.
+
+      - name: Say Hello
+
+        run: echo "Hello, GitHub Actions! This is my first workflow run."
+
+      # Step 3: Another step that runs multiple shell commands.
+
+      - name: List files in the repository
+
+        run: |
+
+          echo "The repository contains the following files:"
+
+          ls -la
+ 
